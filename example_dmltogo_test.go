@@ -8,42 +8,28 @@ import (
 )
 
 func Example() {
-	res, err := dmltogo.DmlToGo("CREATE TABLE `total_data` (`id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id', " +
-		"`region` varchar(32) NOT NULL COMMENT 'region name, like zh; th; kepler'," +
-		"`data_size` bigint NOT NULL DEFAULT '0' COMMENT 'data size;'," +
-		"`createtime` datetime NOT NULL COMMENT 'create time;'," +
-		"`comment` varchar(100) NOT NULL DEFAULT '' COMMENT 'comment'," +
-		"PRIMARY KEY (`id`))")
+	res, err := dmltogo.DmlToGo(`CREATE TABLE Persons (
+                     PersonID int,
+                     LastName varchar(255),
+                     FirstName varchar(255),
+                     Address varchar(255),
+                     City varchar(255) 
+                 );`)
 	log.Println(res, err)
 	/*  res is:
 	package model
 
-	import (
-	    "database/sql"
-	    "time"
-
-	    "github.com/guregu/null"
-	)
-
-	var (
-	    _ = time.Second
-	    _ = sql.LevelDefault
-	    _ = null.Bool{}
-	)
-
-
-	type TotalDatum struct {
-	    ID int `gorm:"column:id;primary_key" json:"id"`
-	    Region string `gorm:"column:region" json:"region"`
-	    DataSize int64 `gorm:"column:data_size" json:"data_size"`
-	    Createtime time.Time `gorm:"column:createtime" json:"createtime"`
-	    Comment string `gorm:"column:comment" json:"comment"`
-
+	type Person struct {
+		Address   string `gorm:"column:Address" json:"Address"`
+		City      string `gorm:"column:City" json:"City"`
+		FirstName string `gorm:"column:FirstName" json:"FirstName"`
+		LastName  string `gorm:"column:LastName" json:"LastName"`
+		PersonID  int    `gorm:"column:PersonID" json:"PersonID"`
 	}
 
 	// TableName sets the insert table name for this struct type
-	func (t *TotalDatum) TableName() string {
-		return "TotalData"
+	func (p *Person) TableName() string {
+		return "Persons"
 	}
 	*/
 }
