@@ -17,7 +17,6 @@ dmltogo.DmlToGo("CREATE TABLE `total_data` (`id` int(11) NOT NULL AUTO_INCREMENT
 Output:
 
 ```
-
 package model
 
 import (
