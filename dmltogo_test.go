@@ -14,5 +14,5 @@ func TestDmlToDo(t *testing.T) {
 		"`comment` varchar(100) NOT NULL DEFAULT '' COMMENT 'comment'," +
 		"PRIMARY KEY (`id`))")
 	assert.Nil(t, err)
-	assert.Equal(t, "package model\n\nimport (\n    \"database/sql\"\n    \"time\"\n\n    \"github.com/guregu/null\"\n)\n\nvar (\n    _ = time.Second\n    _ = sql.LevelDefault\n    _ = null.Bool{}\n)\n\n\ntype TotalDatum struct {\n    \n}\n\n// TableName sets the insert table name for this struct type\nfunc (t *TotalDatum) TableName() string {\n\treturn \"TotalData\"\n}\n", res)
+	assert.Equal(t, "package model\n\nimport \"time\"\n\ntype TotalDatum struct {\n\tComment    string    `gorm:\"column:comment\" json:\"comment\"`\n\tCreatetime time.Time `gorm:\"column:createtime\" json:\"createtime\"`\n\tDataSize   int64     `gorm:\"column:data_size\" json:\"data_size\"`\n\tID         int       `gorm:\"column:id\" json:\"id\"`\n\tRegion     string    `gorm:\"column:region\" json:\"region\"`\n}\n\n// TableName sets the insert table name for this struct type\nfunc (t *TotalDatum) TableName() string {\n\treturn \"TotalData\"\n}\n", string(res))
 }
