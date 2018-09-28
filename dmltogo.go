@@ -32,11 +32,13 @@ func DmlToGo(dml string) ([]byte, error) {
 	structName := inflection.Singular(tableName)
 
 	columns := make(map[string]map[string]string)
-	for i, col := range ddl.TableSpec.Columns {
-		name := col.Name.String()
-		nullable := strconv.FormatBool(bool(ddl.TableSpec.Columns[i].Type.NotNull))
-		mysqlType := strings.ToLower(ddl.TableSpec.Columns[i].Type.Type)
-		columns[name] = map[string]string{"value": mysqlType, "nullable": nullable}
+	if ddl.TableSpec != nil {
+		for i, col := range ddl.TableSpec.Columns {
+			name := col.Name.String()
+			nullable := strconv.FormatBool(bool(ddl.TableSpec.Columns[i].Type.NotNull))
+			mysqlType := strings.ToLower(ddl.TableSpec.Columns[i].Type.Type)
+			columns[name] = map[string]string{"value": mysqlType, "nullable": nullable}
+		}
 	}
 
 	orm, err := db2struct.Generate(columns, tableName, structName, "model", true, true, true)
