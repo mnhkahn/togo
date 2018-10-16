@@ -5,12 +5,11 @@ import (
 	"strconv"
 	"strings"
 
-	"golang.org/x/tools/imports"
-
 	"github.com/Shelnutt2/db2struct"
 	"github.com/jinzhu/inflection"
 	"github.com/smallnest/gen/dbmeta"
 	"github.com/xwb1989/sqlparser"
+	"golang.org/x/tools/imports"
 )
 
 // DmlToGo uses create sql to generate golang struct with gorm tags.
