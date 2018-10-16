@@ -7,7 +7,6 @@ import (
 
 	"github.com/Shelnutt2/db2struct"
 	"github.com/jinzhu/inflection"
-	"github.com/smallnest/gen/dbmeta"
 	"github.com/xwb1989/sqlparser"
 	"golang.org/x/tools/imports"
 )
@@ -27,7 +26,7 @@ func DmlToGo(dml string) ([]byte, error) {
 		return nil, fmt.Errorf("not support type")
 	}
 
-	tableName := dbmeta.FmtFieldName(ddl.NewName.Name.String())
+	tableName := ddl.NewName.Name.String()
 	structName := inflection.Singular(tableName)
 
 	columns := make(map[string]map[string]string)
