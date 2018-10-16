@@ -5,8 +5,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/smallnest/gen/dbmeta"
+
 	"github.com/Shelnutt2/db2struct"
-	"github.com/jinzhu/inflection"
 	"github.com/xwb1989/sqlparser"
 	"golang.org/x/tools/imports"
 )
@@ -27,7 +28,7 @@ func DmlToGo(dml string) ([]byte, error) {
 	}
 
 	tableName := ddl.NewName.Name.String()
-	structName := inflection.Singular(tableName)
+	structName := dbmeta.FmtFieldName(tableName)
 
 	columns := make(map[string]map[string]string)
 	if ddl.TableSpec != nil {
