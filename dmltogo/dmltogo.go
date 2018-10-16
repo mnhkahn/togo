@@ -5,12 +5,11 @@ import (
 	"strconv"
 	"strings"
 
-	"golang.org/x/tools/imports"
+	"github.com/smallnest/gen/dbmeta"
 
 	"github.com/Shelnutt2/db2struct"
-	"github.com/jinzhu/inflection"
-	"github.com/smallnest/gen/dbmeta"
 	"github.com/xwb1989/sqlparser"
+	"golang.org/x/tools/imports"
 )
 
 // DmlToGo uses create sql to generate golang struct with gorm tags.
@@ -28,8 +27,8 @@ func DmlToGo(dml string) ([]byte, error) {
 		return nil, fmt.Errorf("not support type")
 	}
 
-	tableName := dbmeta.FmtFieldName(ddl.NewName.Name.String())
-	structName := inflection.Singular(tableName)
+	tableName := ddl.NewName.Name.String()
+	structName := dbmeta.FmtFieldName(tableName)
 
 	columns := make(map[string]map[string]string)
 	if ddl.TableSpec != nil {

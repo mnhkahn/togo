@@ -4,7 +4,7 @@ package dmltogo_test
 import (
 	"log"
 
-	"github.com/mnhkahn/dmltogo"
+	"github.com/mnhkahn/togo/dmltogo"
 )
 
 func Example() {
