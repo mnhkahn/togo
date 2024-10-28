@@ -1,14 +1,14 @@
-// Package dmltogo
-package dmltogo_test
+// Package ddltogo
+package example
 
 import (
 	"log"
 
-	"github.com/mnhkahn/togo/dmltogo"
+	"github.com/mnhkahn/togo/ddltogo"
 )
 
 func Example() {
-	res, err := dmltogo.DmlToGo(`CREATE TABLE Persons (
+	res, err := ddltogo.DdlToGo(`CREATE TABLE Persons (
                      PersonID int,
                      LastName varchar(255),
                      FirstName varchar(255),

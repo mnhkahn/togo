@@ -1,12 +1,12 @@
-# dmltogo
-Generate go struct by create sql DML.
+# ddltogo
+Generate go struct by create sql DDL.
 
-[Doc](https://godoc.org/github.com/mnhkahn/dmltogo)
+[Doc](https://godoc.org/github.com/mnhkahn/ddltogo)
 
 ### Example:
 
 ```
-dmltogo.DmlToGo(`CREATE TABLE Persons (
+ddltogo.DdlToGo(`CREATE TABLE Persons (
                      PersonID int,
                      LastName varchar(255),
                      FirstName varchar(255),
