@@ -7,7 +7,6 @@ require (
 	github.com/smallnest/gen v0.0.0-20180913104330-62560eebea28
 	github.com/stretchr/testify v1.2.2
 	github.com/xwb1989/sqlparser v0.0.0-20180606152119-120387863bf2
-	golang.org/x/tools v0.0.0-20180927044812-b14f328a6211
 )
 
 require (

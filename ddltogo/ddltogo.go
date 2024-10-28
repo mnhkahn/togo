@@ -7,7 +7,7 @@ import (
 
 	"github.com/smallnest/gen/dbmeta"
 	"github.com/xwb1989/sqlparser"
-	"golang.org/x/tools/imports"
+	// "golang.org/x/tools/imports"
 )
 
 // DdlToGo uses create sql to generate golang struct with gorm tags.
@@ -43,10 +43,10 @@ func DdlToGo(sql string) ([]byte, error) {
 		return nil, err
 	}
 
-	orm, err = imports.Process("", orm, nil)
-	if err != nil {
-		return nil, err
-	}
+	// orm, err = imports.Process("", orm, nil)
+	// if err != nil {
+	// return nil, err
+	// }
 
 	return orm, nil
 }
