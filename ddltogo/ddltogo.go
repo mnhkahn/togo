@@ -14,7 +14,7 @@ import (
 func DdlToGo(sql string) ([]byte, error) {
 	stmt, err := sqlparser.ParseStrictDDL(sql)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("parse ddl error: %s", err.Error())
 	}
 
 	var ddl *sqlparser.DDL
@@ -40,12 +40,12 @@ func DdlToGo(sql string) ([]byte, error) {
 
 	orm, err := Generate(columns, tableName, structName, "model", true, true, true)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("generate error: %s", err.Error())
 	}
 
 	orm, err = imports.Process("", orm, nil)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("imports process error: %s", err.Error())
 	}
 
 	return orm, nil
