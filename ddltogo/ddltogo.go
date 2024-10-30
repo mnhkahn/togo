@@ -43,6 +43,7 @@ func DdlToGo(sql string) ([]byte, error) {
 		return nil, fmt.Errorf("generate error: %s", err.Error())
 	}
 
+	imports.Debug = true
 	orm, err = imports.Process("", orm, nil)
 	if err != nil {
 		return nil, fmt.Errorf("imports process error: %s", err.Error())
