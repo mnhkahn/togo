@@ -1,4 +1,4 @@
-// Package util
+// Package jsontothrift
 package jsontothrift
 
 import (
