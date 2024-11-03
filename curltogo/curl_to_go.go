@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	json_to_go "github.com/kumakichi/json-to-go"
+	"github.com/mnhkahn/gogogo/logger"
 )
 
 /*
@@ -431,6 +432,10 @@ func toTitleCase(str string) string {
 	r := regexp.MustCompile(`\w*`)
 	return replaceAllStringSubmatchFunc(r, str, func(groups []string) string {
 		txt := groups[0]
+		if txt == "" {
+			logger.Info("error", str)
+			return ""
+		}
 		return strings.ToUpper(txt[:1]) + strings.ToLower(txt[1:])
 	})
 }
