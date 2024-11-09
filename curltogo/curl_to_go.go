@@ -7,8 +7,10 @@ import (
 	"regexp"
 	"strings"
 
-	json_to_go "github.com/kumakichi/json-to-go"
 	"github.com/mnhkahn/gogogo/logger"
+	"github.com/mnhkahn/togo/go_title"
+	"github.com/mnhkahn/togo/jsontogo"
+	"golang.org/x/tools/imports"
 )
 
 /*
@@ -48,7 +50,8 @@ import (
 )
 
 %s
-func curl%s(ctx context.Context, url string) ([]byte, error) {
+%s
+func curl%s(ctx context.Context, data %s) ([]byte, error) {
 %s
 }`
 )
@@ -96,9 +99,20 @@ func Parse(curl string) string {
 	} else {
 		render := renderComplex(req)
 		render = addTablePerLine(render, "\t")
-		gocode = fmt.Sprintf(complexFuncCode, promo, getCurlFuncName(req.url), render)
+		structName := "Payload" + getCurlFuncName(req.url)
+		output, err := jsontogo.JsonToGo(req.data.ascii, structName)
+		if err != nil {
+			return err.Error()
+		}
+		gocode = fmt.Sprintf(complexFuncCode, output, promo, getCurlFuncName(req.url), "*"+structName, render)
 	}
-	return gocode
+
+	imports.Debug = true
+	res, err := imports.Process("", []byte(gocode), nil)
+	if err != nil {
+		return err.Error()
+	}
+	return string(res)
 }
 
 func getCurlFuncName(link string) string {
@@ -110,7 +124,7 @@ func getCurlFuncName(link string) string {
 	if len(hosts) < 2 {
 		return ""
 	}
-	return toTitleCase(hosts[len(hosts)-2])
+	return go_title.TitleCase(hosts[len(hosts)-2])
 }
 
 // renderSimple renders a simple HTTP request using net/http convenience methods
@@ -147,9 +161,9 @@ func renderComplex(req *someRelevant) string {
 	if req.insecure {
 		gogogo += "// TODO: This is insecure; use only in dev environments.\n"
 		gogogo += "tr := &http.Transport{\n" +
-			"        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},\n" +
-			"    }\n" +
-			"    client := &http.Client{Transport: tr}\n\n"
+			"    TLSClientConfig: &tls.Config{InsecureSkipVerify: true},\n" +
+			"}\n" +
+			"client := &http.Client{Transport: tr}\n\n"
 
 		clientName = "client"
 	}
@@ -176,17 +190,11 @@ func renderComplex(req *someRelevant) string {
 			}
 
 			if req.headers["Content-Type"] != "" && strings.Contains(req.headers["Content-Type"], "json") {
-				// create a struct for the JSON
-				resultx, e := json_to_go.Parse(req.data.ascii, json_to_go.Options{TypeName: "Payload"})
-				if e != nil {
-					stringBody() // not valid JSON, so just treat as a regular string
-				} else {
-					// valid JSON, so create a struct to hold it
-					gogogo += resultx + "\n\ndata := Payload {\n\t// fill struct\n}\n"
-					gogogo += "payloadBytes, err := json.Marshal(data)\n" + err
-					gogogo += defaultPayloadVar + " := bytes.NewReader(payloadBytes)\n\n"
-				}
+				// valid JSON, so create a struct to hold it
+				gogogo += "payloadBytes, err := json.Marshal(data)\n" + err
+				gogogo += defaultPayloadVar + " := bytes.NewReader(payloadBytes)\n\n"
 			} else {
+				println("AAAA", req.headers["Content-Type"])
 				// not a json Content-Type, so treat as string
 				stringBody()
 			}
