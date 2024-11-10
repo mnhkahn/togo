@@ -51,7 +51,7 @@ import (
 
 %s
 %s
-func curl%s(ctx context.Context, data %s) ([]byte, error) {
+func curl%s(ctx context.Context%s) ([]byte, error) {
 %s
 }`
 )
@@ -100,11 +100,19 @@ func Parse(curl string) string {
 		render := renderComplex(req)
 		render = addTablePerLine(render, "\t")
 		structName := "Payload" + getCurlFuncName(req.url)
-		output, err := jsontogo.JsonToGo(req.data.ascii, structName)
-		if err != nil {
-			return err.Error()
+		var output string
+		var jsonErr error
+		if req.data.ascii != "" {
+			output, jsonErr = jsontogo.JsonToGo(req.data.ascii, structName)
+			if jsonErr != nil {
+				return jsonErr.Error()
+			}
 		}
-		gocode = fmt.Sprintf(complexFuncCode, output, promo, getCurlFuncName(req.url), "*"+structName, render)
+		param := ""
+		if output != "" {
+			param = fmt.Sprintf(", data *%s", structName)
+		}
+		gocode = fmt.Sprintf(complexFuncCode, output, promo, getCurlFuncName(req.url), param, render)
 	}
 
 	imports.Debug = true
@@ -194,7 +202,6 @@ func renderComplex(req *someRelevant) string {
 				gogogo += "payloadBytes, err := json.Marshal(data)\n" + err
 				gogogo += defaultPayloadVar + " := bytes.NewReader(payloadBytes)\n\n"
 			} else {
-				println("AAAA", req.headers["Content-Type"])
 				// not a json Content-Type, so treat as string
 				stringBody()
 			}
