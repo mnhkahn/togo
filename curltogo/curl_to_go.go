@@ -103,9 +103,13 @@ func Parse(curl string) string {
 		var output string
 		var jsonErr error
 		if req.data.ascii != "" {
-			output, jsonErr = jsontogo.JsonToGo(req.data.ascii, structName)
-			if jsonErr != nil {
-				return jsonErr.Error()
+			if req.headers["Content-Type"] == "application/x-www-form-urlencoded" {
+
+			} else {
+				output, jsonErr = jsontogo.JsonToGo(req.data.ascii, structName)
+				if jsonErr != nil {
+					return fmt.Sprintf("json to go err: %s", jsonErr.Error())
+				}
 			}
 		}
 		param := ""
@@ -118,7 +122,7 @@ func Parse(curl string) string {
 	imports.Debug = true
 	res, err := imports.Process("", []byte(gocode), nil)
 	if err != nil {
-		return err.Error()
+		return fmt.Sprintf("import process err: %s", err.Error())
 	}
 	return string(res)
 }

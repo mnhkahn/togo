@@ -157,6 +157,8 @@ func mysqlTypeToGoType(mysqlType string, nullable bool, gureguTypes bool) string
 		return golangFloat32
 	case "binary", "blob", "longblob", "mediumblob", "varbinary":
 		return golangByteArray
+	case "json":
+		return "datatypes.JSON"
 	}
 	return ""
 }
